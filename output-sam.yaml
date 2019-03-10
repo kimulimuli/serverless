@@ -1,0 +1,29 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: AWS Serverless Spring Boot 2 API - com.kimulimul::serverless
+Globals:
+  Api:
+    EndpointConfiguration: REGIONAL
+Resources:
+  GreetingFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: com.kimulimuli.serverless.StreamLambdaHandler::handleRequest
+      Runtime: java8
+      CodeUri: s3://kimulimuli-default/ab4e69bb7d5951ca663819ecfbd59994
+      MemorySize: 512
+      Policies: AWSLambdaBasicExecutionRole
+      Timeout: 30
+      Events:
+        GetResource:
+          Type: Api
+          Properties:
+            Path: /{proxy+}
+            Method: any
+Outputs:
+  GreetingApi:
+    Description: URL for application
+    Value:
+      Fn::Sub: https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/greeting
+    Export:
+      Name: GreetingApi
